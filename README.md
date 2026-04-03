@@ -16,7 +16,7 @@
 - 🦾 **Low-level brain (RL / PPO):** Handles real-time reactive obstacle avoidance — the agent's "muscle memory" and physical intuition.
 - 🧠 **High-level brain (LLM):** Acts as a cognitive overseer. Invoked **only** when the RL agent is detected to be trapped in a local minimum (e.g., U-shaped corridors, maze dead-ends), providing macro spatial reasoning to break the deadlock.
 
-The core design question: **do you need a cloud-scale LLM?** Our experiments show the answer is **no** — we compress the LLM brain to the 1B parameter range, enabling full on-device (edge) deployment without sacrificing navigation robustness.
+The core design question: **do you need a cloud-scale LLM?** Our experiments show the answer is **no** — we compress the LLM brain to the 1B parameter range, served locally via **[LM Studio](https://lmstudio.ai/)** and deployed on an **Orange Pi 4** single-board computer, enabling full on-device edge inference without sacrificing navigation robustness.
 
 ---
 
@@ -31,7 +31,7 @@ The architecture has three major blocks:
 1. **Perceptual Input & MoE Arbiter (left):** The agent reads a 7×7 local radar grid under strict blind-mode partial observability. A sliding-window *Stuck Detector* monitors physical displacement; when the compound trigger condition is satisfied (low displacement Δd over N steps + near-stall goal distance), it escalates control to the LLM tier.
 
 2. **MoE Control Logic (center):**
-   - **Upper tier — LLM Spatial Reasoner:** Receives a structured ASCII prompt (walls, free cells, dead zones, goal vector), generates a candidate waypoint via local CPU inference (Gemma-3 / LFM-2.5 / Qwen2.5-Coder).
+   - **Upper tier — LLM Spatial Reasoner:** Receives a structured ASCII prompt (walls, free cells, dead zones, goal vector), generates a candidate waypoint via local inference served by **LM Studio** on an **Orange Pi 4** (Gemma-3 / LFM-2.5 / Qwen2.5-Coder).
    - **Lower tier — PPO Reactive Controller:** A 51-dim MLP policy that fuses radar features, goal direction, and a Trap Repulsion Field for moment-to-moment action selection.
 
 3. **Action & Execution (right):** Mode-switch logic arbitrates between PPO normal control and LLM waypoint-tracking mode. The integrated system outputs an optimal path under strict partial observability.
@@ -52,13 +52,13 @@ The architecture has three major blocks:
   <img src="docs/benchmark_table.png" width="80%" alt="Benchmark Summary Table"/>
 </p>
 
-| Algorithm | SR-L1 | SR-L2 | SR-L3 | SR-L4 | SR-L5 | **Avg SR** | **Avg Steps** |
-|-----------|--------|--------|--------|--------|--------|------------|---------------|
-| Local Dijkstra | 100% | 100% | 100% | 100% | 100% | **100%** | 71 |
-| Local A* | 100% | 100% | 100% | 100% | 100% | **100%** | 69 |
-| Local GBFS | 100% | 100% | 100% | 100% | 100% | **100%** | 67 |
-| APF (Reactive) | 0% | 0% | 0% | 0% | 0% | **0%** | — |
-| Pure PPO | 100% | 0% | 100% | 100% | 0% | **60%** | 58 |
+| Algorithm | SR-L1 | SR-L2 | SR-L3 | SR-L4 | SR-L5 | Avg SR | Avg Steps |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Local Dijkstra | 100% | 100% | 100% | 100% | 100% | 100% | 71 |
+| Local A* | 100% | 100% | 100% | 100% | 100% | 100% | 69 |
+| Local GBFS | 100% | 100% | 100% | 100% | 100% | 100% | 67 |
+| APF (Reactive) | 0% | 0% | 0% | 0% | 0% | 0% | — |
+| Pure PPO | 100% | 0% | 100% | 100% | 0% | 60% | 58 |
 | **Ours (RL+LLM)** | **100%** | **100%** | **100%** | **100%** | **100%** | **100%** | **98** |
 
 ### Success Rate across Map Levels
@@ -103,7 +103,7 @@ The plot above traces a Pure PPO agent's distance to goal (red) and policy entro
 
 ## 🔬 Experiment 2 — Lightweight LLM Ablation
 
-**Goal:** Evaluate the impact of different ≤1.5B parameter model architectures on navigation performance under edge-device compute constraints. All models are locally deployed — no cloud API.
+**Goal:** Evaluate the impact of different ≤1.5B parameter model architectures on navigation performance under edge-device compute constraints. All models are served locally via **LM Studio** on an **Orange Pi 4** single-board computer — no cloud API, no GPU.
 
 **Models compared:**
 - `Gemma-3 (1B)` — dense Transformer baseline
@@ -118,11 +118,11 @@ The plot above traces a Pure PPO agent's distance to goal (red) and policy entro
 
 ### Per-Map Success Rate (computed from raw data)
 
-| Model | Map 0 SR | Map 1 SR | Map 2 SR | Map 3 SR | Map 4 SR | **Avg SR** | **Avg Latency** |
-|-------|----------|----------|----------|----------|----------|------------|-----------------|
-| Gemma-3 (1B) | 95% | 90% | 90% | 90% | 90% | **91%** | 9.59s |
-| LFM-2.5 (1.2B) | 100% | 85% | 100% | 100% | 95% | **96%** | **9.17s** ⚡ |
-| Qwen2.5-Coder (1.5B) | 95% | 90% | 95% | 95% | **100%** | **95%** | 12.11s |
+| Model | Map 0 SR | Map 1 SR | Map 2 SR | Map 3 SR | Map 4 SR | Avg SR | Avg Latency |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Gemma-3 (1B) | 95% | 90% | 90% | 90% | 90% | 91% | 9.59s |
+| **LFM-2.5 (1.2B)** | **100%** | **85%** | **100%** | **100%** | **95%** | **96%** | **9.17s** ⚡ |
+| Qwen2.5-Coder (1.5B) | 95% | 90% | 95% | 95% | 100% | 95% | 12.11s |
 
 ### Hyperparameter Sensitivity: L2 vs L5
 
@@ -138,6 +138,31 @@ Sensitivity analysis of the stuck-detector trigger parameters: window size N and
 - **Qwen2.5-Coder (1.5B)** — Best for worst-case robustness. Its code-level 2D array spatial reasoning makes it the **only model** sustaining **100% SR on the hardest trap map (Map 4)**. Trades ~3s extra latency (12.11s) for superior reasoning in extreme cases.
 - **Gemma-3 (1B)** — Solid baseline at 9.59s latency and 91% overall SR. Weaker spatial coordinate reasoning leads to occasional failures on Map 4.
 - **Fault tolerance validated:** Even 1B-scale "small models" as the cognitive brain successfully perform spatial escape reasoning previously achievable only with cloud-scale models (e.g., GPT-4), thanks to the RL safety net at the lower layer.
+
+### The "Instruction Compliance Paradox"
+
+We designed an **Adversarial Spatial Grounding Test** where candidate waypoints were intentionally contaminated with wall coordinates to stress-test spatial hallucination resistance.
+
+- **Qwen2.5-Coder (1.5B):** Achieved the highest formatting compliance but suffered a **21% spatial hallucination rate**. Being highly instruction-tuned makes it a perfect text executor but a vulnerable physical gatekeeper.
+- **LFM-2.5 (1.2B):** Exhibited a **"safety via rebellion"** paradox — it ignored the flawed external shortlist **83% of the time**, relying on its internal spatial prior to output conservative coordinates, dropping the hallucination rate to just **7%**. The remaining errors were flawlessly absorbed by the RL collision repulsion layer.
+
+> *A model that blindly follows instructions is dangerous in physical space. The best cognitive co-pilot knows when to override the plan.*
+
+---
+
+## 🍊 Hardware Stress Test — Orange Pi 4 Edge Deployment
+
+All LLM inference in this work runs locally on an **Orange Pi 4** (3.8 GB RAM) served via **LM Studio** — no GPU, no cloud. Deploying 1B-class models on this hardware frequently triggers severe memory swap I/O delays, causing the LLM to stall mid-inference. Our decoupled architecture is specifically designed to survive these bottlenecks.
+
+| Metric | Orange Pi 4 Result |
+| :--- | :--- |
+| **Terminal Success Rate** | **90.0%** (9/10 episodes on L5 Hard) |
+| **Avg. LLM Inference Latency** | **37.82 s** / call |
+| **Peak Latency Survived** | **77.43 s** 👑 *(severe cognitive freeze, zero physical crash)* |
+
+**Why does it still work?** During the 77-second window where the LLM "Cerebrum" is frozen computing the next waypoint, the RL "Cerebellum" continues running at full frequency — maintaining collision repulsion and keeping the robot physically safe. **The survival reflex is never blocked by cognitive load.**
+
+> *This is the defining advantage of the decoupled architecture: the body keeps moving safely even when the brain is thinking hard.*
 
 ---
 
@@ -192,11 +217,11 @@ cd Decoupled-Dual-Brain-Nav
 pip install -r requirements.txt
 ```
 
-**Install a local LLM backend (Ollama recommended):**
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-ollama pull qwen2.5-coder:1.5b   # or gemma3:1b / lfm2.5:1.2b
-```
+**Set up LM Studio for local LLM inference:**
+
+1. Download and install [LM Studio](https://lmstudio.ai/) on your machine or Orange Pi 4.
+2. In LM Studio, search and download one of the supported models (see Requirements below).
+3. Start the **Local Server** in LM Studio (default: `http://localhost:1234`).
 
 **Run baseline benchmark:**
 ```bash
@@ -214,8 +239,11 @@ python scripts/ablation_llm.py --model qwen2.5-coder-1.5b --maps all
 
 - Python ≥ 3.10
 - PyTorch ≥ 2.0
-- [Ollama](https://ollama.com/) or compatible local LLM serving backend
-- Supported local models: `gemma3:1b`, `qwen2.5-coder:1.5b`, `lfm-2.5:1.2b`
+- [LM Studio](https://lmstudio.ai/) — local LLM inference server (OpenAI-compatible API)
+- Supported models: `Gemma-3 1B`, `LFM-2.5 1.2B`, `Qwen2.5-Coder 1.5B`
+
+**Edge hardware used in this work:**
+- 🍊 **Orange Pi 4** — all LLM inference in the ablation study was served on-device via LM Studio running on Orange Pi 4, with no cloud dependency.
 
 ---
 
