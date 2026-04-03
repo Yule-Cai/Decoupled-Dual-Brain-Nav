@@ -1,0 +1,612 @@
+{
+    "map_0": [
+        {
+            "success": true,
+            "steps": 30,
+            "llm_calls": 0,
+            "total_time": 0.007930517196655273
+        },
+        {
+            "success": true,
+            "steps": 66,
+            "llm_calls": 1,
+            "total_time": 12.138784646987915
+        },
+        {
+            "success": true,
+            "steps": 18,
+            "llm_calls": 0,
+            "total_time": 0.005991458892822266
+        },
+        {
+            "success": true,
+            "steps": 27,
+            "llm_calls": 0,
+            "total_time": 0.0063686370849609375
+        },
+        {
+            "success": true,
+            "steps": 287,
+            "llm_calls": 9,
+            "total_time": 86.25876808166504
+        },
+        {
+            "success": true,
+            "steps": 32,
+            "llm_calls": 0,
+            "total_time": 0.007957220077514648
+        },
+        {
+            "success": true,
+            "steps": 36,
+            "llm_calls": 0,
+            "total_time": 0.009088516235351562
+        },
+        {
+            "success": true,
+            "steps": 29,
+            "llm_calls": 0,
+            "total_time": 0.0069408416748046875
+        },
+        {
+            "success": true,
+            "steps": 19,
+            "llm_calls": 0,
+            "total_time": 0.005094051361083984
+        },
+        {
+            "success": true,
+            "steps": 48,
+            "llm_calls": 1,
+            "total_time": 12.010629415512085
+        },
+        {
+            "success": true,
+            "steps": 29,
+            "llm_calls": 0,
+            "total_time": 0.007894754409790039
+        },
+        {
+            "success": true,
+            "steps": 17,
+            "llm_calls": 0,
+            "total_time": 0.004307270050048828
+        },
+        {
+            "success": true,
+            "steps": 80,
+            "llm_calls": 1,
+            "total_time": 11.942538738250732
+        },
+        {
+            "success": true,
+            "steps": 30,
+            "llm_calls": 0,
+            "total_time": 0.007207632064819336
+        },
+        {
+            "success": true,
+            "steps": 23,
+            "llm_calls": 0,
+            "total_time": 0.008062362670898438
+        },
+        {
+            "success": true,
+            "steps": 17,
+            "llm_calls": 0,
+            "total_time": 0.0040531158447265625
+        },
+        {
+            "success": true,
+            "steps": 30,
+            "llm_calls": 0,
+            "total_time": 0.011743307113647461
+        },
+        {
+            "success": true,
+            "steps": 23,
+            "llm_calls": 0,
+            "total_time": 0.006316184997558594
+        },
+        {
+            "success": true,
+            "steps": 44,
+            "llm_calls": 1,
+            "total_time": 11.946492195129395
+        },
+        {
+            "success": true,
+            "steps": 22,
+            "llm_calls": 0,
+            "total_time": 0.005656003952026367
+        }
+    ],
+    "map_1": [
+        {
+            "success": true,
+            "steps": 35,
+            "llm_calls": 0,
+            "total_time": 0.00865936279296875
+        },
+        {
+            "success": true,
+            "steps": 18,
+            "llm_calls": 0,
+            "total_time": 0.004240751266479492
+        },
+        {
+            "success": true,
+            "steps": 27,
+            "llm_calls": 0,
+            "total_time": 0.006123065948486328
+        },
+        {
+            "success": true,
+            "steps": 29,
+            "llm_calls": 0,
+            "total_time": 0.007777690887451172
+        },
+        {
+            "success": true,
+            "steps": 25,
+            "llm_calls": 0,
+            "total_time": 0.006439208984375
+        },
+        {
+            "success": true,
+            "steps": 90,
+            "llm_calls": 2,
+            "total_time": 18.1810941696167
+        },
+        {
+            "success": false,
+            "steps": 801,
+            "llm_calls": 1,
+            "total_time": 12.153558492660522
+        },
+        {
+            "success": true,
+            "steps": 35,
+            "llm_calls": 0,
+            "total_time": 0.007926225662231445
+        },
+        {
+            "success": true,
+            "steps": 19,
+            "llm_calls": 0,
+            "total_time": 0.005182743072509766
+        },
+        {
+            "success": false,
+            "steps": 801,
+            "llm_calls": 4,
+            "total_time": 40.81366753578186
+        },
+        {
+            "success": true,
+            "steps": 26,
+            "llm_calls": 0,
+            "total_time": 0.0072021484375
+        },
+        {
+            "success": true,
+            "steps": 38,
+            "llm_calls": 1,
+            "total_time": 12.013183116912842
+        },
+        {
+            "success": true,
+            "steps": 121,
+            "llm_calls": 5,
+            "total_time": 18.039685487747192
+        },
+        {
+            "success": true,
+            "steps": 20,
+            "llm_calls": 0,
+            "total_time": 0.007389068603515625
+        },
+        {
+            "success": true,
+            "steps": 26,
+            "llm_calls": 0,
+            "total_time": 0.0066432952880859375
+        },
+        {
+            "success": false,
+            "steps": 801,
+            "llm_calls": 1,
+            "total_time": 12.358129262924194
+        },
+        {
+            "success": true,
+            "steps": 22,
+            "llm_calls": 0,
+            "total_time": 0.005425453186035156
+        },
+        {
+            "success": true,
+            "steps": 22,
+            "llm_calls": 0,
+            "total_time": 0.005936622619628906
+        },
+        {
+            "success": true,
+            "steps": 153,
+            "llm_calls": 6,
+            "total_time": 66.41747665405273
+        },
+        {
+            "success": true,
+            "steps": 18,
+            "llm_calls": 0,
+            "total_time": 0.004873037338256836
+        }
+    ],
+    "map_2": [
+        {
+            "success": true,
+            "steps": 21,
+            "llm_calls": 0,
+            "total_time": 0.00540614128112793
+        },
+        {
+            "success": true,
+            "steps": 27,
+            "llm_calls": 0,
+            "total_time": 0.006582021713256836
+        },
+        {
+            "success": true,
+            "steps": 26,
+            "llm_calls": 0,
+            "total_time": 0.007200479507446289
+        },
+        {
+            "success": true,
+            "steps": 30,
+            "llm_calls": 0,
+            "total_time": 0.0074541568756103516
+        },
+        {
+            "success": true,
+            "steps": 21,
+            "llm_calls": 0,
+            "total_time": 0.005395174026489258
+        },
+        {
+            "success": true,
+            "steps": 20,
+            "llm_calls": 0,
+            "total_time": 0.005429506301879883
+        },
+        {
+            "success": true,
+            "steps": 21,
+            "llm_calls": 0,
+            "total_time": 0.005623579025268555
+        },
+        {
+            "success": true,
+            "steps": 23,
+            "llm_calls": 0,
+            "total_time": 0.006353855133056641
+        },
+        {
+            "success": true,
+            "steps": 21,
+            "llm_calls": 0,
+            "total_time": 0.005494832992553711
+        },
+        {
+            "success": true,
+            "steps": 36,
+            "llm_calls": 0,
+            "total_time": 0.009525060653686523
+        },
+        {
+            "success": true,
+            "steps": 26,
+            "llm_calls": 0,
+            "total_time": 0.00696873664855957
+        },
+        {
+            "success": true,
+            "steps": 23,
+            "llm_calls": 0,
+            "total_time": 0.006227254867553711
+        },
+        {
+            "success": true,
+            "steps": 24,
+            "llm_calls": 0,
+            "total_time": 0.0067708492279052734
+        },
+        {
+            "success": true,
+            "steps": 19,
+            "llm_calls": 0,
+            "total_time": 0.005087614059448242
+        },
+        {
+            "success": true,
+            "steps": 28,
+            "llm_calls": 0,
+            "total_time": 0.007685184478759766
+        },
+        {
+            "success": true,
+            "steps": 20,
+            "llm_calls": 0,
+            "total_time": 0.005251884460449219
+        },
+        {
+            "success": true,
+            "steps": 24,
+            "llm_calls": 0,
+            "total_time": 0.006054878234863281
+        },
+        {
+            "success": true,
+            "steps": 30,
+            "llm_calls": 0,
+            "total_time": 0.008931636810302734
+        },
+        {
+            "success": true,
+            "steps": 25,
+            "llm_calls": 0,
+            "total_time": 0.005857706069946289
+        },
+        {
+            "success": true,
+            "steps": 27,
+            "llm_calls": 0,
+            "total_time": 0.006826639175415039
+        }
+    ],
+    "map_3": [
+        {
+            "success": true,
+            "steps": 20,
+            "llm_calls": 0,
+            "total_time": 0.005234956741333008
+        },
+        {
+            "success": true,
+            "steps": 28,
+            "llm_calls": 0,
+            "total_time": 0.007169961929321289
+        },
+        {
+            "success": true,
+            "steps": 30,
+            "llm_calls": 0,
+            "total_time": 0.007875680923461914
+        },
+        {
+            "success": true,
+            "steps": 19,
+            "llm_calls": 0,
+            "total_time": 0.005404949188232422
+        },
+        {
+            "success": true,
+            "steps": 41,
+            "llm_calls": 0,
+            "total_time": 0.009842872619628906
+        },
+        {
+            "success": true,
+            "steps": 30,
+            "llm_calls": 0,
+            "total_time": 0.016646146774291992
+        },
+        {
+            "success": true,
+            "steps": 68,
+            "llm_calls": 0,
+            "total_time": 0.01679682731628418
+        },
+        {
+            "success": true,
+            "steps": 57,
+            "llm_calls": 0,
+            "total_time": 0.014515399932861328
+        },
+        {
+            "success": true,
+            "steps": 41,
+            "llm_calls": 0,
+            "total_time": 0.010777711868286133
+        },
+        {
+            "success": true,
+            "steps": 120,
+            "llm_calls": 4,
+            "total_time": 0.03139305114746094
+        },
+        {
+            "success": true,
+            "steps": 63,
+            "llm_calls": 0,
+            "total_time": 0.015619754791259766
+        },
+        {
+            "success": true,
+            "steps": 46,
+            "llm_calls": 0,
+            "total_time": 0.01128530502319336
+        },
+        {
+            "success": true,
+            "steps": 52,
+            "llm_calls": 0,
+            "total_time": 0.014030694961547852
+        },
+        {
+            "success": true,
+            "steps": 48,
+            "llm_calls": 0,
+            "total_time": 0.014881610870361328
+        },
+        {
+            "success": true,
+            "steps": 52,
+            "llm_calls": 1,
+            "total_time": 0.014835834503173828
+        },
+        {
+            "success": true,
+            "steps": 31,
+            "llm_calls": 0,
+            "total_time": 0.007896661758422852
+        },
+        {
+            "success": true,
+            "steps": 22,
+            "llm_calls": 0,
+            "total_time": 0.005839109420776367
+        },
+        {
+            "success": true,
+            "steps": 34,
+            "llm_calls": 0,
+            "total_time": 0.008673906326293945
+        },
+        {
+            "success": true,
+            "steps": 44,
+            "llm_calls": 0,
+            "total_time": 0.010740041732788086
+        },
+        {
+            "success": true,
+            "steps": 74,
+            "llm_calls": 1,
+            "total_time": 10.544371366500854
+        }
+    ],
+    "map_4": [
+        {
+            "success": true,
+            "steps": 26,
+            "llm_calls": 0,
+            "total_time": 0.0074405670166015625
+        },
+        {
+            "success": true,
+            "steps": 70,
+            "llm_calls": 0,
+            "total_time": 0.01719498634338379
+        },
+        {
+            "success": true,
+            "steps": 36,
+            "llm_calls": 0,
+            "total_time": 0.009563207626342773
+        },
+        {
+            "success": true,
+            "steps": 360,
+            "llm_calls": 16,
+            "total_time": 69.21769380569458
+        },
+        {
+            "success": true,
+            "steps": 51,
+            "llm_calls": 0,
+            "total_time": 0.013039350509643555
+        },
+        {
+            "success": true,
+            "steps": 40,
+            "llm_calls": 0,
+            "total_time": 0.009754657745361328
+        },
+        {
+            "success": true,
+            "steps": 189,
+            "llm_calls": 8,
+            "total_time": 48.232800006866455
+        },
+        {
+            "success": true,
+            "steps": 38,
+            "llm_calls": 0,
+            "total_time": 0.009206771850585938
+        },
+        {
+            "success": true,
+            "steps": 82,
+            "llm_calls": 2,
+            "total_time": 21.178385496139526
+        },
+        {
+            "success": true,
+            "steps": 21,
+            "llm_calls": 0,
+            "total_time": 0.011399984359741211
+        },
+        {
+            "success": true,
+            "steps": 56,
+            "llm_calls": 0,
+            "total_time": 0.013869285583496094
+        },
+        {
+            "success": false,
+            "steps": 801,
+            "llm_calls": 0,
+            "total_time": 0.18965649604797363
+        },
+        {
+            "success": true,
+            "steps": 59,
+            "llm_calls": 1,
+            "total_time": 11.877777814865112
+        },
+        {
+            "success": true,
+            "steps": 46,
+            "llm_calls": 0,
+            "total_time": 0.011306285858154297
+        },
+        {
+            "success": true,
+            "steps": 18,
+            "llm_calls": 0,
+            "total_time": 0.005013465881347656
+        },
+        {
+            "success": true,
+            "steps": 20,
+            "llm_calls": 0,
+            "total_time": 0.005286455154418945
+        },
+        {
+            "success": true,
+            "steps": 426,
+            "llm_calls": 17,
+            "total_time": 117.8912718296051
+        },
+        {
+            "success": true,
+            "steps": 39,
+            "llm_calls": 0,
+            "total_time": 0.009585857391357422
+        },
+        {
+            "success": true,
+            "steps": 72,
+            "llm_calls": 1,
+            "total_time": 11.697429180145264
+        },
+        {
+            "success": true,
+            "steps": 78,
+            "llm_calls": 1,
+            "total_time": 11.717915058135986
+        }
+    ]
+}

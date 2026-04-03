@@ -1,0 +1,13 @@
+{
+  "model": "gemma-3-1b",
+  "test_rounds": 50,
+  "stats": {
+    "format_fail": 0,
+    "oob": 0,
+    "wall_pick": 4,
+    "not_in_list": 36,
+    "perfect": 10
+  },
+  "format_compliance_rate": 100.0,
+  "spatial_hallucination_rate": 8.0
+}

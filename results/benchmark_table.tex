@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\caption{Navigation Benchmark Results}
+\label{tab:benchmark}
+\begin{tabular}{lcccccccccccc}
+\toprule
+\multirow{2}{*}{Algorithm} & \multicolumn{6}{c}{Success Rate (\%)} & \multicolumn{6}{c}{Avg. Steps} \\
+\cmidrule(lr){2-7} \cmidrule(lr){8-13}
+ & L1 & L2 & L3 & L4 & L5 & Avg & L1 & L2 & L3 & L4 & L5 & Avg \\
+\midrule
+Local Dijkstra & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 & 46 & 46 & 50 & 85 & 129 & 71 \\
+Local A* & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 & 44 & 46 & 47 & 83 & 124 & 69 \\
+Local GBFS & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 & 44 & 46 & 45 & 81 & 121 & 67 \\
+APF (Reactive) & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & — & — & — & — & — & — \\
+Pure PPO & 100.0 & 0.0 & 100.0 & 100.0 & 0.0 & 60.0 & 46 & — & 44 & 84 & — & 58 \\
+\textbf{Ours (RL+LLM)} & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 & 100.0 & 46 & 111 & 44 & 84 & 204 & 98 \\
+\bottomrule
+\end{tabular}
+\end{table}

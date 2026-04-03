@@ -1,0 +1,13 @@
+{
+  "model": "lfm2.5-1.2b",
+  "test_rounds": 50,
+  "stats": {
+    "format_fail": 0,
+    "oob": 0,
+    "wall_pick": 0,
+    "not_in_list": 45,
+    "perfect": 5
+  },
+  "format_compliance_rate": 100.0,
+  "spatial_hallucination_rate": 0.0
+}

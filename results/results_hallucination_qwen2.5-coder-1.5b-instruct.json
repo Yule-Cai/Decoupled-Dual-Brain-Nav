@@ -1,0 +1,13 @@
+{
+  "model": "qwen2.5-coder-1.5b-instruct",
+  "test_rounds": 50,
+  "stats": {
+    "format_fail": 0,
+    "oob": 2,
+    "wall_pick": 8,
+    "not_in_list": 12,
+    "perfect": 28
+  },
+  "format_compliance_rate": 100.0,
+  "spatial_hallucination_rate": 16.0
+}
