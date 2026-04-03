@@ -226,3 +226,7 @@ For questions or collaboration, please open an issue or start a discussion in th
 ---
 
 *📌 Phase 2 (3D physical robot deployment) — coming soon.*
+
+Made with ❤️ by **Yule Cai**
+
+⭐ Star this repo if you find it useful — it helps others discover the project!
