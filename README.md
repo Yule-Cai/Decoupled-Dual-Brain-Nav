@@ -23,7 +23,7 @@ The core design question: **do you need a cloud-scale LLM?** Our experiments sho
 ## 🏗️ System Architecture
 
 <p align="center">
-  <img src="docs/architecture_diagram.jpg" width="100%" alt="System Architecture"/>
+  <img src="fig1_system_arch.png" width="100%" alt="Detailed System Architecture"/>
 </p>
 
 The architecture has three major blocks:
@@ -36,6 +36,12 @@ The architecture has three major blocks:
 
 3. **Action & Execution (right):** Mode-switch logic arbitrates between PPO normal control and LLM waypoint-tracking mode. The integrated system outputs an optimal path under strict partial observability.
 
+<p align="center">
+  <img src="fig2_system_arch_simple.png" width="80%" alt="Simplified System Architecture"/>
+</p>
+
+*Simplified overview of the dual-brain framework showing the key data flows between the stuck detector, LLM brain, and PPO controller.*
+
 ---
 
 ## 📊 Experiment 1 — Baseline Benchmark
@@ -45,11 +51,7 @@ The architecture has three major blocks:
 ### Full Benchmark Results
 
 <p align="center">
-  <img src="docs/benchmark_panel.png" width="90%" alt="Benchmark Panel"/>
-</p>
-
-<p align="center">
-  <img src="docs/benchmark_table.png" width="80%" alt="Benchmark Summary Table"/>
+  <img src="fig5_benchmark_panel.png" width="90%" alt="Benchmark Panel"/>
 </p>
 
 | Algorithm | SR-L1 | SR-L2 | SR-L3 | SR-L4 | SR-L5 | Avg SR | Avg Steps |
@@ -64,7 +66,7 @@ The architecture has three major blocks:
 ### Success Rate across Map Levels
 
 <p align="center">
-  <img src="docs/success_rate_comparison.png" width="75%" alt="Success Rate Comparison"/>
+  <img src="fig4_success_rate.png" width="75%" alt="Success Rate Comparison"/>
 </p>
 
 **Key findings:**
@@ -79,22 +81,22 @@ Path comparisons across all algorithms on each map level. Green = success, red d
 
 <table>
   <tr>
-    <td align="center"><b>L1</b><br/><img src="docs/Figure_10.png" width="420"/></td>
-    <td align="center"><b>L2</b><br/><img src="docs/Figure_11.png" width="420"/></td>
+    <td align="center"><b>L1</b><br/><img src="fig6_trajectory_L1.png" width="420"/></td>
+    <td align="center"><b>L2</b><br/><img src="fig7_trajectory_L2.png" width="420"/></td>
   </tr>
   <tr>
-    <td align="center"><b>L3</b><br/><img src="docs/Figure_12.png" width="420"/></td>
-    <td align="center"><b>L4</b><br/><img src="docs/Figure_13.png" width="420"/></td>
+    <td align="center"><b>L3</b><br/><img src="fig8_trajectory_L3.png" width="420"/></td>
+    <td align="center"><b>L4</b><br/><img src="fig9_trajectory_L4.png" width="420"/></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><b>L5</b><br/><img src="docs/Figure_14.png" width="420"/></td>
+    <td align="center" colspan="2"><b>L5</b><br/><img src="fig10_trajectory_L5.png" width="420"/></td>
   </tr>
 </table>
 
 ### The "Overconfidence" Trap: Why Pure PPO Fails
 
 <p align="center">
-  <img src="docs/ppo_entropy_trap.png" width="80%" alt="PPO Entropy Trap"/>
+  <img src="fig3_ppo_trap.png" width="80%" alt="PPO Entropy Trap"/>
 </p>
 
 The plot above traces a Pure PPO agent's distance to goal (red) and policy entropy (blue dashed) over 200 steps. After an initial approach, the agent locks into a cyclic oscillation at distance ~10 — high entropy spikes indicate the policy "knows" it is confused, yet low entropy plateaus show it repeatedly commits to the same wrong actions. This is the **local minima / overconfidence trap** that the LLM tier is designed to break.
@@ -113,7 +115,7 @@ The plot above traces a Pure PPO agent's distance to goal (red) and policy entro
 ### Ablation Results
 
 <p align="center">
-  <img src="docs/lightweight_llms_ablation.png" width="90%" alt="LLM Ablation"/>
+  <img src="fig12_llm_ablation.png" width="90%" alt="LLM Ablation"/>
 </p>
 
 ### Per-Map Success Rate (computed from raw data)
@@ -127,7 +129,7 @@ The plot above traces a Pure PPO agent's distance to goal (red) and policy entro
 ### Hyperparameter Sensitivity: L2 vs L5
 
 <p align="center">
-  <img src="docs/ablation_L2_vs_L5_clean.png" width="85%" alt="Hyperparameter Sensitivity"/>
+  <img src="fig11_ablation.png" width="85%" alt="Hyperparameter Sensitivity"/>
 </p>
 
 Sensitivity analysis of the stuck-detector trigger parameters: window size N and displacement threshold Δd. The chosen configuration (N=15, Δd=1.5) achieves 100% SR on L2 and 87% on L5, while keeping LLM call frequency low. Larger windows increase path length without improving success rate.
@@ -142,6 +144,10 @@ Sensitivity analysis of the stuck-detector trigger parameters: window size N and
 ### The "Instruction Compliance Paradox"
 
 We designed an **Adversarial Spatial Grounding Test** where candidate waypoints were intentionally contaminated with wall coordinates to stress-test spatial hallucination resistance.
+
+<p align="center">
+  <img src="fig13_hallucination.png" width="85%" alt="Hallucination Analysis"/>
+</p>
 
 - **Qwen2.5-Coder (1.5B):** Achieved the highest formatting compliance but suffered a **21% spatial hallucination rate**. Being highly instruction-tuned makes it a perfect text executor but a vulnerable physical gatekeeper.
 - **LFM-2.5 (1.2B):** Exhibited a **"safety via rebellion"** paradox — it ignored the flawed external shortlist **83% of the time**, relying on its internal spatial prior to output conservative coordinates, dropping the hallucination rate to just **7%**. The remaining errors were flawlessly absorbed by the RL collision repulsion layer.
@@ -185,15 +191,19 @@ These results clear the core algorithmic barriers for Phase 2: deployment on rea
 
 ```
 Decoupled-Dual-Brain-Nav/
-├── docs/                          # All figures for README
-│   ├── architecture_diagram.jpg
-│   ├── benchmark_panel.png
-│   ├── benchmark_table.png
-│   ├── success_rate_comparison.png
-│   ├── lightweight_llms_ablation.png
-│   ├── ablation_L2_vs_L5_clean.png
-│   ├── ppo_entropy_trap.png
-│   └── Figure_10~16.png           # Per-level trajectory comparisons
+├── fig1_system_arch.png           # Detailed system architecture diagram
+├── fig2_system_arch_simple.png    # Simplified architecture overview
+├── fig3_ppo_trap.png              # PPO overconfidence trap visualization
+├── fig4_success_rate.png          # Success rate across difficulty levels
+├── fig5_benchmark_panel.png       # Full benchmark 4-panel analysis
+├── fig6_trajectory_L1.png         # Trajectory comparison — Level 1
+├── fig7_trajectory_L2.png         # Trajectory comparison — Level 2
+├── fig8_trajectory_L3.png         # Trajectory comparison — Level 3
+├── fig9_trajectory_L4.png         # Trajectory comparison — Level 4
+├── fig10_trajectory_L5.png        # Trajectory comparison — Level 5
+├── fig11_ablation.png             # Hyperparameter sensitivity ablation
+├── fig12_llm_ablation.png         # Lightweight LLM ablation study
+├── fig13_hallucination.png        # Adversarial spatial grounding test
 ├── env/                           # 2D grid world simulator (L1–L5 maps)
 ├── agents/
 │   ├── rl_policy/                 # PPO policy + Trap Repulsion Field
