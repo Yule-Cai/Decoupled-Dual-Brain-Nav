@@ -120,8 +120,8 @@ The plot above traces a Pure PPO agent's distance to goal (red) and policy entro
 
 | Model | Map 0 SR | Map 1 SR | Map 2 SR | Map 3 SR | Map 4 SR | Avg SR | Avg Latency |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| Gemma-3 (1B) | 95% | 90% | 90% | 90% | 90% | 91% | 9.59s |
-| **LFM-2.5 (1.2B)** | **100%** | **85%** | **100%** | **100%** | **95%** | **96%** | **9.17s** ⚡ |
+| Gemma-3 (1B) | 95% | 90% | 90% | 90% | 90% | 91% | 9.60s |
+| **LFM-2.5 (1.2B)** | **100%** | **85%** | **100%** | **100%** | **95%** | **96%** | **9.18s** ⚡ |
 | Qwen2.5-Coder (1.5B) | 95% | 90% | 95% | 95% | 100% | 95% | 12.11s |
 
 ### Hyperparameter Sensitivity: L2 vs L5
@@ -134,9 +134,9 @@ Sensitivity analysis of the stuck-detector trigger parameters: window size N and
 
 **Key findings:**
 
-- **LFM-2.5 (1.2B)** — Best for real-time deployment. Its non-Transformer architecture delivers the lowest single-call latency (**9.17s**) and highest average SR (**96%**), proving Liquid architectures are competitive for latency-sensitive embodied control.
+- **LFM-2.5 (1.2B)** — Best for real-time deployment. Its non-Transformer architecture delivers the lowest single-call latency (**9.18s**) and highest average SR (**96%**), proving Liquid architectures are competitive for latency-sensitive embodied control.
 - **Qwen2.5-Coder (1.5B)** — Best for worst-case robustness. Its code-level 2D array spatial reasoning makes it the **only model** sustaining **100% SR on the hardest trap map (Map 4)**. Trades ~3s extra latency (12.11s) for superior reasoning in extreme cases.
-- **Gemma-3 (1B)** — Solid baseline at 9.59s latency and 91% overall SR. Weaker spatial coordinate reasoning leads to occasional failures on Map 4.
+- **Gemma-3 (1B)** — Solid baseline at 9.60s latency and 91% overall SR. Weaker spatial coordinate reasoning leads to occasional failures on Map 4.
 - **Fault tolerance validated:** Even 1B-scale "small models" as the cognitive brain successfully perform spatial escape reasoning previously achievable only with cloud-scale models (e.g., GPT-4), thanks to the RL safety net at the lower layer.
 
 ### The "Instruction Compliance Paradox"
