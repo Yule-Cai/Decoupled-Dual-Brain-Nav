@@ -10,6 +10,12 @@ Style rules
 * Single-panel figures have NO axis title.
 * Multi-panel figures label each sub-panel with a bold letter in the
   upper-left corner using label_ax(), e.g. (a), (b), (c), (d).
+* Direction hints (higher/lower is better) placed in the title row
+  upper-right, never overlapping data or legends.
+* Fig 10 "* Chosen" annotation placed above the highest bar with
+  extra y-headroom to avoid overlap with SR% labels.
+* Fig 11 panel (d) latency: Gemma=9.60s, LFM=9.18s, Qwen=12.11s
+  (computed from raw JSON data).
 
 Required data files (place in the same directory, or update path args):
   ablation_dual_map.json
@@ -123,15 +129,25 @@ hall = {
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def label_ax(ax, letter, fontsize=13):
-    """Place a bold sub-panel label e.g. '(a)' in the upper-left corner."""
+    """Bold sub-panel label '(a)' in upper-left corner, outside the axes."""
     ax.text(-0.08, 1.04, f'({letter})',
             transform=ax.transAxes,
             fontsize=fontsize, fontweight='bold',
             va='bottom', ha='left', color='#111111')
 
 
+def add_direction_hint(ax, text):
+    """Direction hint in upper-right of title row — never overlaps data."""
+    ax.text(1.0, 1.04, text,
+            transform=ax.transAxes,
+            fontsize=8, ha='right', va='bottom',
+            color='#888888', style='italic',
+            bbox=dict(boxstyle='round,pad=0.2', facecolor='white',
+                      edgecolor='none', alpha=0.8))
+
+
 def make_twin(ax, spine_color):
-    """Create a right-side twin axis with matching spine colour."""
+    """Right-side twin axis with matching spine colour."""
     ax2 = ax.twinx()
     ax2.spines['top'].set_visible(False)
     ax2.spines['right'].set_color(spine_color)
@@ -140,7 +156,7 @@ def make_twin(ax, spine_color):
 
 
 # =============================================================================
-# FIG 2 — PPO Local-Minima Trap  (single panel, no label)
+# FIG 2 — PPO Local-Minima Trap  (single panel)
 # =============================================================================
 def plot_fig2(outpath='fig2_ppo_trap.png'):
     np.random.seed(42)
@@ -190,7 +206,7 @@ def plot_fig2(outpath='fig2_ppo_trap.png'):
 
 
 # =============================================================================
-# FIG 3 — Success Rate  (single panel, no label)
+# FIG 3 — Success Rate  (single panel)
 # =============================================================================
 def plot_fig3(outpath='fig3_success_rate.png'):
     fig, ax = plt.subplots(figsize=(7, 4.5))
@@ -358,14 +374,18 @@ def plot_fig10(ab_path='ablation_dual_map.json', outpath='fig10_ablation.png'):
         ax2.plot(xs, steps, color='#d62728', marker='o', ms=6,
                  lw=2.0, zorder=4, label='Avg. Steps (success only)')
 
+        # SR% labels just above each bar
         for sr, x in zip(srs, xs):
             ax.text(x, sr+0.8, f'{sr:.0f}%',
                     ha='center', va='bottom',
                     fontsize=8.5, fontweight='bold', color='#333333')
 
-        ci = list(map(str, pvals)).index(str(chosen))
+        # "* Chosen" well above the highest bar — avoids overlap with SR labels
+        ci      = list(map(str, pvals)).index(str(chosen))
+        max_sr  = max(srs)
         ax.annotate('* Chosen',
-                    xy=(ci, srs[ci]+2), xytext=(ci, srs[ci]+11),
+                    xy=(ci, max_sr + 8),
+                    xytext=(ci, max_sr + 18),
                     ha='center', fontsize=8, color='#ff7f0e', fontweight='bold',
                     arrowprops=dict(arrowstyle='->', color='#ff7f0e', lw=1.2))
 
@@ -375,12 +395,11 @@ def plot_fig10(ab_path='ablation_dual_map.json', outpath='fig10_ablation.png'):
         ax.set_ylabel('Success Rate (%)', color='#1f77b4', fontsize=10)
         ax.tick_params(axis='y', colors='#1f77b4', labelsize=9)
         ax2.set_ylabel('Avg. Steps (success only)', color='#d62728', fontsize=10)
-        ax.set_ylim(0, 130)
+        ax.set_ylim(0, 140)   # extra headroom for annotation
 
         label_ax(ax, letter)
-        ax.text(0.02, 0.97, map_tag,
-                transform=ax.transAxes,
-                fontsize=9, va='top', ha='left', color='#555555')
+        ax.text(0.02, 1.04, map_tag, transform=ax.transAxes,
+                fontsize=9, va='bottom', ha='left', color='#555555')
 
         p_chosen = mpatches.Patch(color='#ff7f0e', label='Chosen param')
         p_other  = mpatches.Patch(color='#aec7e8', label='Other')
@@ -392,11 +411,11 @@ def plot_fig10(ab_path='ablation_dual_map.json', outpath='fig10_ablation.png'):
 
     fig, axes = plt.subplots(2, 2, figsize=(13, 9))
 
-    _panel(axes[0,0], ab['L2']['N'], N_vals, 'Window Size N',   15,  'a',
+    _panel(axes[0,0], ab['L2']['N'], N_vals, 'Window Size N',    15,  'a',
            'L2 (Trap-Heavy)', '\u0394d = 1.5 fixed')
     _panel(axes[0,1], ab['L2']['D'], D_vals, 'Threshold \u0394d', 1.5, 'b',
            'L2 (Trap-Heavy)', 'N = 15 fixed')
-    _panel(axes[1,0], ab['L5']['N'], N_vals, 'Window Size N',   15,  'c',
+    _panel(axes[1,0], ab['L5']['N'], N_vals, 'Window Size N',    15,  'c',
            'L5 (Hard)', '\u0394d = 1.5 fixed')
     _panel(axes[1,1], ab['L5']['D'], D_vals, 'Threshold \u0394d', 1.5, 'd',
            'L5 (Hard)', 'N = 15 fixed')
@@ -409,6 +428,7 @@ def plot_fig10(ab_path='ablation_dual_map.json', outpath='fig10_ablation.png'):
 
 # =============================================================================
 # FIG 11 — LLM Backend Ablation  (2x2, labels a-d)
+# Latency values computed from raw JSON (Gemma≈9.60s, LFM≈9.18s, Qwen≈12.11s)
 # =============================================================================
 def plot_fig11(
     gemma_path = 'Gemma-3-1B_data.json',
@@ -449,9 +469,7 @@ def plot_fig11(
     # ── (a) Success Rate ─────────────────────────────────────────────────────
     ax = axes[0, 0]
     label_ax(ax, 'a')
-    ax.text(0.98, 0.02, 'higher \u2191 is better',
-            transform=ax.transAxes, fontsize=8.5,
-            ha='right', va='bottom', color='#666666', style='italic')
+    add_direction_hint(ax, 'higher \u2191 is better')
     for i, (mk, col) in enumerate(zip(MK, MC)):
         ax.bar(xm+(i-1)*bw, [stats[mk][0][mp] for mp in MAPS],
                bw*0.9, color=col, alpha=0.82, label=mk,
@@ -463,9 +481,7 @@ def plot_fig11(
     # ── (b) Steps box plots ──────────────────────────────────────────────────
     ax = axes[0, 1]
     label_ax(ax, 'b')
-    ax.text(0.98, 0.98, 'lower \u2193 is better',
-            transform=ax.transAxes, fontsize=8.5,
-            ha='right', va='top', color='#666666', style='italic')
+    add_direction_hint(ax, 'lower \u2193 is better')
     handles = []
     for i, (mk, col) in enumerate(zip(MK, MC)):
         for j, mp in enumerate(MAPS):
@@ -488,9 +504,7 @@ def plot_fig11(
     # ── (c) LLM Call Frequency box plots ────────────────────────────────────
     ax = axes[1, 0]
     label_ax(ax, 'c')
-    ax.text(0.98, 0.98, 'lower \u2193 is better',
-            transform=ax.transAxes, fontsize=8.5,
-            ha='right', va='top', color='#666666', style='italic')
+    add_direction_hint(ax, 'lower \u2193 is better')
     for i, (mk, col) in enumerate(zip(MK, MC)):
         for j, mp in enumerate(MAPS):
             d = stats[mk][2][mp]
@@ -508,12 +522,10 @@ def plot_fig11(
     ax.set(xlabel='Map', ylabel='LLM Calls per Episode')
     ax.legend(handles=handles, fontsize=9)
 
-    # ── (d) Mean Inference Latency bar ──────────────────────────────────────
+    # ── (d) Mean Inference Latency — computed from raw JSON ─────────────────
     ax = axes[1, 1]
     label_ax(ax, 'd')
-    ax.text(0.98, 0.98, 'lower \u2193 is better',
-            transform=ax.transAxes, fontsize=8.5,
-            ha='right', va='top', color='#666666', style='italic')
+    add_direction_hint(ax, 'lower \u2193 is better')
     mean_lats = []
     for mk in MK:
         all_lats = sum([stats[mk][3][mp] for mp in MAPS], [])
@@ -572,17 +584,14 @@ def plot_fig12(outpath='fig12_hallucination.png'):
                 continue
             center_y = l + v / 2
             if v >= 10:
-                # large segment: white label centred inside
                 ax.text(bar.get_x()+bar.get_width()/2, center_y, f'{v}%',
                         ha='center', va='center',
                         fontsize=10, color='white', fontweight='bold', zorder=10)
             else:
-                # small segment: annotate to the right with a leader line
                 bar_right = bar.get_x() + bar.get_width()
-                bar_mid_y = l + v / 2
                 ax.annotate(f'{v}%',
-                            xy=(bar_right, bar_mid_y),
-                            xytext=(bar_right + 0.08, bar_mid_y),
+                            xy=(bar_right, l+v/2),
+                            xytext=(bar_right+0.08, l+v/2),
                             ha='left', va='center',
                             fontsize=8.5, color='#333333', fontweight='bold',
                             arrowprops=dict(arrowstyle='-', color='#888888',
@@ -594,9 +603,8 @@ def plot_fig12(outpath='fig12_hallucination.png'):
     ax.set_xticklabels(model_names, fontsize=10.5)
     ax.set_ylabel('Proportion (%)')
     ax.set_ylim(0, 100)
-    ax.set_xlim(-0.6, 2.9)   # extra right margin for side annotations
+    ax.set_xlim(-0.6, 2.9)
     patch_handles = [mpatches.Patch(color=HCOLS[c], label=HLABELS[c]) for c in cats]
-    # Legend below the axes to avoid overlapping bars
     ax.legend(handles=patch_handles,
               loc='upper left', bbox_to_anchor=(0.0, -0.12),
               ncol=2, fontsize=8.5, framealpha=0.95)
@@ -619,9 +627,7 @@ def plot_fig12(outpath='fig12_hallucination.png'):
     # ── (c) Spatial Hallucination Rate ──────────────────────────────────────
     ax = axes[1, 0]
     label_ax(ax, 'c')
-    ax.text(0.98, 0.98, 'lower \u2193 is better',
-            transform=ax.transAxes, fontsize=8.5,
-            ha='right', va='top', color='#666666', style='italic')
+    add_direction_hint(ax, 'lower \u2193 is better')
     spat  = [hall[m]['wall_pick'] for m in model_names]
     bcols = ['#2ca02c' if v == min(spat) else '#d62728' for v in spat]
     bars  = ax.bar(range(3), spat, color=bcols,
@@ -643,9 +649,7 @@ def plot_fig12(outpath='fig12_hallucination.png'):
     # ── (d) Perfect Compliance Rate ──────────────────────────────────────────
     ax = axes[1, 1]
     label_ax(ax, 'd')
-    ax.text(0.98, 0.98, 'higher \u2191 is better',
-            transform=ax.transAxes, fontsize=8.5,
-            ha='right', va='top', color='#666666', style='italic')
+    add_direction_hint(ax, 'higher \u2191 is better')
     perf  = [hall[m]['perfect'] for m in model_names]
     bcols = ['#2ca02c' if v == max(perf) else '#1f77b4' for v in perf]
     bars  = ax.bar(range(3), perf, color=bcols,
